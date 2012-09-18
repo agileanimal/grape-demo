@@ -10,4 +10,19 @@ describe User do
     user = User.new(:first_name => "Mark", :last_name => "Madsen")
     user.name.should == "Mark Madsen"
   end
+  
+  context "Entity" do  
+    it "should have an entity that returns expected keys" do
+      User::Entity.exposures.keys.should include :name, :email
+    end
+  
+    it "should have an entity produces JSON" do
+      user = User.create(first_name: "Mark", last_name: "Madsen", email: "mark@example.com", password: "password")
+      
+      user_json = JSON.parse((User::Entity.represent [user]).to_json).first
+      user_json['name'].should == "Mark Madsen"
+      user_json['email'].should == "mark@example.com"
+      user_json['password'].should be nil
+    end
+  end
 end
