@@ -21,4 +21,19 @@ describe "APIv1  Methods" do
       }.to_json
     last_response.status.should == 200
   end
+  
+  context "Users" do
+    it "returns a list of users" do
+      get "api/v1/users/", {}
+      last_response.body.should == User::Entity.represent(User.all).to_json
+      last_response.status.should == 200
+    end
+  
+    it "finds a user by their id" do
+      mark = users(:mark)
+      get "api/v1/users/#{mark.id}", {}
+      last_response.body.should == User::Entity.represent(mark).to_json
+      last_response.status.should == 200
+    end
+  end
 end
