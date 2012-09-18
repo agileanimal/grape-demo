@@ -59,8 +59,8 @@ describe "APIv1  Methods" do
     it "fails to create a pet without a name" do
       mark = users(:mark)
       post "api/v1/users/1337/pets.json", {}
-      last_response.body.should == Pet::Entity.represent(pet).to_json
-      last_response.status.should == 201
+      last_response.body.should == "{\"error\":\"missing parameter: name\"}" 
+      last_response.status.should == 403
     end
   end
 end
