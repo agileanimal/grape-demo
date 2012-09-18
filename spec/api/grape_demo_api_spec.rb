@@ -35,5 +35,11 @@ describe "APIv1  Methods" do
       last_response.body.should == User::Entity.represent(mark).to_json
       last_response.status.should == 200
     end
+    
+    it "returns 404, not found if there is no user with a given id" do
+      get "api/v1/users/1337", {}
+      last_response.body.should == "{\"error\":\"Not Found\"}"
+      last_response.status.should == 404
+    end
   end
 end

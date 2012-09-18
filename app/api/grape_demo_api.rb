@@ -19,6 +19,7 @@ class GrapeDemoAPI < Grape::API
     get ":id" do
       id = params[:id]
       user = User.where(id: id).first
+      not_found! if user.nil?
       present user, with: User::Entity
     end
   end
