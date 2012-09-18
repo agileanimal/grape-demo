@@ -41,5 +41,26 @@ describe "APIv1  Methods" do
       last_response.body.should == "{\"error\":\"Not Found\"}"
       last_response.status.should == 404
     end
+    
+    it "creates a pet for a given user" do
+      mark = users(:mark)
+      post "api/v1/users/#{mark.id}/pets.json", {name: "fifi"}
+      pet = mark.pets.last
+      last_response.body.should == Pet::Entity.represent(pet).to_json
+      last_response.status.should == 201
+    end
+    
+    it "fails to create a pet for a fake user" do
+      post "api/v1/users/1337/pets.json", {name: "fifi"}
+      last_response.body.should == "{\"error\":\"User does not exist\"}"
+      last_response.status.should == 422
+    end
+    
+    it "fails to create a pet without a name" do
+      mark = users(:mark)
+      post "api/v1/users/1337/pets.json", {}
+      last_response.body.should == Pet::Entity.represent(pet).to_json
+      last_response.status.should == 201
+    end
   end
 end
