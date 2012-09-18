@@ -9,7 +9,11 @@ class User < ActiveRecord::Base
   validates_presence_of :email, :first_name, :last_name
   validates_uniqueness_of :email
   
-  entity :email, :name
+  has_many :pets
+  
+  entity :email, :name do
+    expose :pets, using: Pet::Entity
+  end
     
   def name 
     "#{first_name} #{last_name}"
